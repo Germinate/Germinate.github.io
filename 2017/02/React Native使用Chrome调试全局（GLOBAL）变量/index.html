@@ -84,19 +84,19 @@
 
 
 
-<meta name="description" content="阅读本文之前，需要了解GBK与UTF-8的编码知识，相关内容可以参考上一篇博文。
-字符集错误转换导致的问题UTF-8格式编码的字节流，按GBK字符集转换为字符串，会出现乱码，这很正常。但将其重新转为字节流，再用UTF-8字符集转为字符串，还是乱码。这就让我产生了疑惑，虽然使用错误的字符集必然导致乱码，但字节的信息并没有改变，因此再转为字节流，用正确的字符集解码，应该得到正常的字符串。但事实是，被错">
+<meta name="description" content="使用React Native开发过程中，将本地存储的模块react-native-storage放入了全局中，期望使用chrome调试时，可以像网页调试一样直接在控制台调试api，这样比在应用程序中调试方便很多。但是，在控制台中，GLOBAL是未定义的，更别提访问全局的变量了。经过查找资料，发现了问题所在。React Native 的chrome调试工具，使用Web Worker运行app的程序，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GBK与UTF-8编码错误转换后，无法再正确恢复">
-<meta property="og:url" content="http://yoursite.com/2016/12/GBK与UTF-8编码错误转换后，无法恢复/index.html">
+<meta property="og:title" content="React Native使用Chrome调试全局（GLOBAL）变量">
+<meta property="og:url" content="http://yoursite.com/2017/02/React Native使用Chrome调试全局（GLOBAL）变量/index.html">
 <meta property="og:site_name" content="Germinate's Blog">
-<meta property="og:description" content="阅读本文之前，需要了解GBK与UTF-8的编码知识，相关内容可以参考上一篇博文。
-字符集错误转换导致的问题UTF-8格式编码的字节流，按GBK字符集转换为字符串，会出现乱码，这很正常。但将其重新转为字节流，再用UTF-8字符集转为字符串，还是乱码。这就让我产生了疑惑，虽然使用错误的字符集必然导致乱码，但字节的信息并没有改变，因此再转为字节流，用正确的字符集解码，应该得到正常的字符串。但事实是，被错">
-<meta property="og:updated_time" content="2016-12-31T17:55:10.404Z">
+<meta property="og:description" content="使用React Native开发过程中，将本地存储的模块react-native-storage放入了全局中，期望使用chrome调试时，可以像网页调试一样直接在控制台调试api，这样比在应用程序中调试方便很多。但是，在控制台中，GLOBAL是未定义的，更别提访问全局的变量了。经过查找资料，发现了问题所在。React Native 的chrome调试工具，使用Web Worker运行app的程序，">
+<meta property="og:image" content="http://ol5mzi4z4.bkt.clouddn.com/React%20Native%E4%BD%BF%E7%94%A8Chrome%E8%B0%83%E8%AF%95%E5%85%A8%E5%B1%80%EF%BC%88GLOBAL%EF%BC%89%E5%8F%98%E9%87%8F_change.png">
+<meta property="og:image" content="http://ol5mzi4z4.bkt.clouddn.com/React%20Native%E4%BD%BF%E7%94%A8Chrome%E8%B0%83%E8%AF%95%E5%85%A8%E5%B1%80%EF%BC%88GLOBAL%EF%BC%89%E5%8F%98%E9%87%8F_result.png">
+<meta property="og:updated_time" content="2017-02-14T08:07:36.974Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GBK与UTF-8编码错误转换后，无法再正确恢复">
-<meta name="twitter:description" content="阅读本文之前，需要了解GBK与UTF-8的编码知识，相关内容可以参考上一篇博文。
-字符集错误转换导致的问题UTF-8格式编码的字节流，按GBK字符集转换为字符串，会出现乱码，这很正常。但将其重新转为字节流，再用UTF-8字符集转为字符串，还是乱码。这就让我产生了疑惑，虽然使用错误的字符集必然导致乱码，但字节的信息并没有改变，因此再转为字节流，用正确的字符集解码，应该得到正常的字符串。但事实是，被错">
+<meta name="twitter:title" content="React Native使用Chrome调试全局（GLOBAL）变量">
+<meta name="twitter:description" content="使用React Native开发过程中，将本地存储的模块react-native-storage放入了全局中，期望使用chrome调试时，可以像网页调试一样直接在控制台调试api，这样比在应用程序中调试方便很多。但是，在控制台中，GLOBAL是未定义的，更别提访问全局的变量了。经过查找资料，发现了问题所在。React Native 的chrome调试工具，使用Web Worker运行app的程序，">
+<meta name="twitter:image" content="http://ol5mzi4z4.bkt.clouddn.com/React%20Native%E4%BD%BF%E7%94%A8Chrome%E8%B0%83%E8%AF%95%E5%85%A8%E5%B1%80%EF%BC%88GLOBAL%EF%BC%89%E5%8F%98%E9%87%8F_change.png">
 
 
 
@@ -124,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/12/GBK与UTF-8编码错误转换后，无法恢复/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/02/React Native使用Chrome调试全局（GLOBAL）变量/"/>
 
 
 
 
 
-  <title> GBK与UTF-8编码错误转换后，无法再正确恢复 | Germinate's Blog </title>
+  <title> React Native使用Chrome调试全局（GLOBAL）变量 | Germinate's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -233,7 +233,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/GBK与UTF-8编码错误转换后，无法恢复/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/React Native使用Chrome调试全局（GLOBAL）变量/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Shuhao Zhang">
@@ -257,7 +257,7 @@
             
             
               
-                GBK与UTF-8编码错误转换后，无法再正确恢复
+                React Native使用Chrome调试全局（GLOBAL）变量
               
             
           </h1>
@@ -272,8 +272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-31T20:26:14+08:00">
-                2016-12-31
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-10T18:20:26+08:00">
+                2017-02-10
               </time>
             
 
@@ -313,14 +313,7 @@
       
 
       
-        <p>阅读本文之前，需要了解GBK与UTF-8的编码知识，相关内容可以参考<a href="https://germinate.github.io/2016/12/utf-8%E4%B8%8E%E4%B8%AD%E6%96%87%E5%AD%97%E7%AC%A6%E9%9B%86%E8%A7%A3%E6%9E%90/" target="_blank" rel="external">上一篇博文</a>。</p>
-<h3 id="字符集错误转换导致的问题"><a href="#字符集错误转换导致的问题" class="headerlink" title="字符集错误转换导致的问题"></a>字符集错误转换导致的问题</h3><p>UTF-8格式编码的字节流，按GBK字符集转换为字符串，会出现乱码，这很正常。但将其重新转为字节流，再用UTF-8字符集转为字符串，还是乱码。这就让我产生了疑惑，虽然使用错误的字符集必然导致乱码，但字节的信息并没有改变，因此再转为字节流，用正确的字符集解码，应该得到正常的字符串。但事实是，被错误字符集转换过的字符串，无法恢复到原来的字符集。</p>
-<h3 id="问题的根本原因"><a href="#问题的根本原因" class="headerlink" title="问题的根本原因"></a>问题的根本原因</h3><p>造成该问题的根源是<strong>字节</strong>发生了变化。GBK或UTF-8遇到无法解析的字符时，会使用特殊的字符代替，因此造成原有字节信息的丢失，无法恢复。</p>
-<h3 id="错误转换的分析"><a href="#错误转换的分析" class="headerlink" title="错误转换的分析"></a>错误转换的分析</h3><h4 id="UTF-8-→-GBK"><a href="#UTF-8-→-GBK" class="headerlink" title="UTF-8 → GBK"></a>UTF-8 → GBK</h4><p>对于一串UTF-8编码的字节流，使用GBK进行解码。连续两个大于127的字节被认为是一个GBK编码的字符；若只读到一个大于127的字节，便发生错误，无法解析。此时，用字符<strong>‘？’</strong>代替错误字节，ASCII码是63。<br>以<strong>“樊”</strong>字为例，UTF-8编码使用三个字节表示该字符，字节码为[11100110, 10101000, 10001010]（[e6, a8, 8a]）。使用GBK解码时，读到第一个字节大于127，则取两个字节解析为一个GBK字符。前两个字节e6 8a被解析为GBK字符——妯。 第三个字节无法解析，所以赋值为？，最后的结果是 <strong>妯?</strong>。<br>可以看出，最后一个字节的信息丢失了，由<strong>8a</strong>变成<strong>3F</strong>，即使把结果再转换为字节流，也无法用utf-8字符集正确解析了。</p>
-<h4 id="GBK-→-UTF-8"><a href="#GBK-→-UTF-8" class="headerlink" title="GBK → UTF-8"></a>GBK → UTF-8</h4><p>对于一串GBK编码的字节流，使用UTF-8解码。UTF-8对于字节的格式有严格要求，当解析某个字符失败时，使用<strong>‘�’</strong>（UTF-8编码为EF BF BD）代替。<br>继续以<strong>“樊”</strong>字为例，其GBK字节码为[10110111, 10101110]（[B7, AE]）。使用UTF-8解码时，根据规则，要求10开头的字节之前，必须有字节标识一个字符的长度，所以两个字节都无法解析。最后的字符串是��。<br>可以看出，所有的字节信息都丢失了，因此无法再使用GBK解析该字符串。<br>注意，UTF-8用�替换，是以字符为单位的。例如[11100110, 10101000, 01000001]使用UTF-8解码，得到的结果是�A，而不是��A。根据第一个字节的格式，UTF-8期望将三个字节转换为一个字符。但最后一个字节不符合要求，所以前两个字节被一个�代替。而不是每个字节都被�代替。</p>
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ol>
-<li><a href="http://blog.csdn.net/chinainvent/article/details/5550589" target="_blank" rel="external">把gbk的编码按utf-8来解码，可能导致的不可恢复的错误——Chinainvent</a></li>
-</ol>
+        <p>使用React Native开发过程中，将本地存储的模块<a href="https://github.com/sunnylqm/react-native-storage" target="_blank" rel="external">react-native-storage</a>放入了全局中，期望使用chrome调试时，可以像网页调试一样直接在控制台调试api，这样比在应用程序中调试方便很多。<br>但是，在控制台中，GLOBAL是未定义的，更别提访问全局的变量了。经过查找资料，发现了问题所在。<br>React Native 的chrome调试工具，使用<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Workers_API/Using_web_workers" target="_blank" rel="external">Web Worker</a>运行app的程序，但调试界面默认使用网页页面的运行环境。Web Worker有自己的运行环境，与页面的运行环境不共享变量，所以无法访问到GLOBAL。解决方法非常简单，把运行环境切换为<strong>debuggerWorker.js</strong>即可。如下图所示：<br><img src="http://ol5mzi4z4.bkt.clouddn.com/React%20Native%E4%BD%BF%E7%94%A8Chrome%E8%B0%83%E8%AF%95%E5%85%A8%E5%B1%80%EF%BC%88GLOBAL%EF%BC%89%E5%8F%98%E9%87%8F_change.png" alt="切换运行环境"><br>之后，就可以使用GLOBAL中的变量了。<br><img src="http://ol5mzi4z4.bkt.clouddn.com/React%20Native%E4%BD%BF%E7%94%A8Chrome%E8%B0%83%E8%AF%95%E5%85%A8%E5%B1%80%EF%BC%88GLOBAL%EF%BC%89%E5%8F%98%E9%87%8F_result.png" alt="效果"></p>
 
       
     </div>
@@ -347,8 +340,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/12/utf-8与中文字符集解析/" rel="next" title="UTF-8与GBK字符集解析">
-                <i class="fa fa-chevron-left"></i> UTF-8与GBK字符集解析
+              <a href="/2016/12/GBK与UTF-8编码错误转换后，无法恢复/" rel="next" title="GBK与UTF-8编码错误转换后，无法再正确恢复">
+                <i class="fa fa-chevron-left"></i> GBK与UTF-8编码错误转换后，无法再正确恢复
               </a>
             
           </div>
@@ -356,10 +349,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/02/React Native使用Chrome调试全局（GLOBAL）变量/" rel="prev" title="React Native使用Chrome调试全局（GLOBAL）变量">
-                React Native使用Chrome调试全局（GLOBAL）变量 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -406,17 +395,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -458,22 +438,6 @@
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#字符集错误转换导致的问题"><span class="nav-number">1.</span> <span class="nav-text">字符集错误转换导致的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题的根本原因"><span class="nav-number">2.</span> <span class="nav-text">问题的根本原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#错误转换的分析"><span class="nav-number">3.</span> <span class="nav-text">错误转换的分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#UTF-8-→-GBK"><span class="nav-number">3.1.</span> <span class="nav-text">UTF-8 → GBK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GBK-→-UTF-8"><span class="nav-number">3.2.</span> <span class="nav-text">GBK → UTF-8</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
     </div>
