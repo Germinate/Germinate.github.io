@@ -92,7 +92,7 @@
 <meta property="og:site_name" content="Germinate's Blog">
 <meta property="og:description" content="阅读本文之前，需要了解GBK与UTF-8的编码知识，相关内容可以参考上一篇博文。
 字符集错误转换导致的问题UTF-8格式编码的字节流，按GBK字符集转换为字符串，会出现乱码，这很正常。但将其重新转为字节流，再用UTF-8字符集转为字符串，还是乱码。这就让我产生了疑惑，虽然使用错误的字符集必然导致乱码，但字节的信息并没有改变，因此再转为字节流，用正确的字符集解码，应该得到正常的字符串。但事实是，被错">
-<meta property="og:updated_time" content="2016-12-31T17:55:10.404Z">
+<meta property="og:updated_time" content="2017-06-19T10:11:28.582Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="GBK与UTF-8编码错误转换后，无法再正确恢复">
 <meta name="twitter:description" content="阅读本文之前，需要了解GBK与UTF-8的编码知识，相关内容可以参考上一篇博文。
@@ -323,7 +323,7 @@
       
 
       
-        <p>阅读本文之前，需要了解GBK与UTF-8的编码知识，相关内容可以参考<a href="https://germinate.github.io/2016/12/utf-8%E4%B8%8E%E4%B8%AD%E6%96%87%E5%AD%97%E7%AC%A6%E9%9B%86%E8%A7%A3%E6%9E%90/" target="_blank" rel="external">上一篇博文</a>。</p>
+        <p>阅读本文之前，需要了解GBK与UTF-8的编码知识，相关内容可以参考<a href="https://germinate.github.io/2016/utf-8%E4%B8%8E%E4%B8%AD%E6%96%87%E5%AD%97%E7%AC%A6%E9%9B%86%E8%A7%A3%E6%9E%90/" target="_blank" rel="external">上一篇博文</a>。</p>
 <h3 id="字符集错误转换导致的问题"><a href="#字符集错误转换导致的问题" class="headerlink" title="字符集错误转换导致的问题"></a>字符集错误转换导致的问题</h3><p>UTF-8格式编码的字节流，按GBK字符集转换为字符串，会出现乱码，这很正常。但将其重新转为字节流，再用UTF-8字符集转为字符串，还是乱码。这就让我产生了疑惑，虽然使用错误的字符集必然导致乱码，但字节的信息并没有改变，因此再转为字节流，用正确的字符集解码，应该得到正常的字符串。但事实是，被错误字符集转换过的字符串，无法恢复到原来的字符集。</p>
 <h3 id="问题的根本原因"><a href="#问题的根本原因" class="headerlink" title="问题的根本原因"></a>问题的根本原因</h3><p>造成该问题的根源是<strong>字节</strong>发生了变化。GBK或UTF-8遇到无法解析的字符时，会使用特殊的字符代替，因此造成原有字节信息的丢失，无法恢复。</p>
 <h3 id="错误转换的分析"><a href="#错误转换的分析" class="headerlink" title="错误转换的分析"></a>错误转换的分析</h3><h4 id="UTF-8-→-GBK"><a href="#UTF-8-→-GBK" class="headerlink" title="UTF-8 → GBK"></a>UTF-8 → GBK</h4><p>对于一串UTF-8编码的字节流，使用GBK进行解码。连续两个大于127的字节被认为是一个GBK编码的字符；若只读到一个大于127的字节，便发生错误，无法解析。此时，用字符<strong>‘？’</strong>代替错误字节，ASCII码是63。<br>以<strong>“樊”</strong>字为例，UTF-8编码使用三个字节表示该字符，字节码为[11100110, 10101000, 10001010]（[e6, a8, 8a]）。使用GBK解码时，读到第一个字节大于127，则取两个字节解析为一个GBK字符。前两个字节e6 8a被解析为GBK字符——妯。 第三个字节无法解析，所以赋值为？，最后的结果是 <strong>妯?</strong>。<br>可以看出，最后一个字节的信息丢失了，由<strong>8a</strong>变成<strong>3F</strong>，即使把结果再转换为字节流，也无法用utf-8字符集正确解析了。</p>
@@ -443,7 +443,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
