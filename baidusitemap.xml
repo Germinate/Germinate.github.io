@@ -4,12 +4,27 @@
 
     
   <url>
+    <loc>http://yoursite.com/2018/Jboss%20eap7.1%20%E9%85%8D%E7%BD%AE%E9%83%A8%E7%BD%B2%E5%85%A5%E9%97%A8/</loc>
+    <lastmod>2018-02-02T11:01:30.092Z</lastmod>
+    <data>
+        <display>
+        <title>Jboss eap7.1 配置部署入门</title>
+        <pubTime>2018-02-02T10:53:58.185Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2017/title-%20react-navigation%E8%87%AA%E5%AE%9A%E4%B9%89StackNavigator%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC%E5%8A%A8%E7%94%BB/</loc>
-    <lastmod>2017-07-07T11:14:11.713Z</lastmod>
+    <lastmod>2017-07-07T11:14:11.714Z</lastmod>
     <data>
         <display>
         <title>react-navigation自定义StackNavigator页面跳转动画</title>
-        <pubTime>2017-07-07T11:12:06.630Z</pubTime>
+        <pubTime>2017-07-07T11:12:06.631Z</pubTime>
         
          
            
@@ -35,7 +50,7 @@
     
   <url>
     <loc>http://yoursite.com/2017/flex%E5%B8%83%E5%B1%80%E6%97%B6%EF%BC%8C%E8%AE%BE%E7%BD%AEalignItem%E5%B1%9E%E6%80%A7%E5%AF%BC%E8%87%B4%E5%85%83%E7%B4%A0%E4%B8%8D%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98%E6%8E%A2%E7%A9%B6/</loc>
-    <lastmod>2017-06-19T10:17:57.073Z</lastmod>
+    <lastmod>2017-06-19T10:17:57.074Z</lastmod>
     <data>
         <display>
         <title>flex布局时，设置alignItem属性导致元素不显示的问题探究</title>
@@ -69,7 +84,7 @@
     <data>
         <display>
         <title>React Native使用Chrome调试全局（GLOBAL）变量</title>
-        <pubTime>2017-02-10T10:20:26.184Z</pubTime>
+        <pubTime>2017-02-10T10:20:26.185Z</pubTime>
         
          
            
@@ -80,11 +95,11 @@
     
   <url>
     <loc>http://yoursite.com/2016/utf-8%E4%B8%8E%E4%B8%AD%E6%96%87%E5%AD%97%E7%AC%A6%E9%9B%86%E8%A7%A3%E6%9E%90/</loc>
-    <lastmod>2016-12-31T12:39:24.058Z</lastmod>
+    <lastmod>2016-12-31T12:39:24.059Z</lastmod>
     <data>
         <display>
         <title>UTF-8与GBK字符集解析</title>
-        <pubTime>2016-12-29T02:50:11.786Z</pubTime>
+        <pubTime>2016-12-29T02:50:11.787Z</pubTime>
         
          
            

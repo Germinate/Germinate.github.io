@@ -231,6 +231,168 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/Jboss eap7.1 配置部署入门/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Shuhao Zhang">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Germinate's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Germinate's Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/Jboss eap7.1 配置部署入门/" itemprop="url">
+                  Jboss eap7.1 配置部署入门
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-02T18:53:58+08:00">
+                2018-02-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/Jboss eap7.1 配置部署入门/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/Jboss eap7.1 配置部署入门/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本文从介绍了Linux系统下Jboss-eap-7.1服务器 <strong>standalone</strong> 模式的配置部署入门。90%的内容来自jboss的<a href="https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.1/html-single/configuration_guide/" target="_blank" rel="external">官方配置文档</a>，只不过从初学者的角度对配置的过程进行了梳理，介绍了部署应用时普遍会用到的配置项。参考本文，大多数应用应该可以在jboss eap上成功运行。<br>下文出现的命令、代码和文件地址中，${JBOSS_HOME}指代Jboss-eap-7.1所处的根目录。</p>
+<h3 id="安装与启动、停止"><a href="#安装与启动、停止" class="headerlink" title="安装与启动、停止"></a>安装与启动、停止</h3><p><strong>安装：</strong>所谓“安装”，就是把下载好的包解压到某个地址即可。<br><strong>启动：</strong>进入${JBOSS_HOME}/bin目录，执行 standalone.sh 脚本，看到输出<code>started in XXXXms</code>，就证明服务器已经成功启动。<br><strong>停止：</strong>服务器的进程通常都是后台运行。停止时，在${JBOSS_HOME}/bin目录下执行 <code>./jboss-cli.sh --connect</code>，进入命令行管理页面，输入<code>shutdown</code>命令，即可停止服务器。（也可以合并为一条语句：<code>./jboss-cli.sh --connect command=:shutdown</code>）<br><strong>配置：</strong>修改${JBOSS_HOME}/bin下的standalone.conf文件，可以改变Jboss启动的配置。<br>在文件中加入 <code>JAVA_HOME=&quot;/path/jdk&quot;</code>，可以指定使用的jdk，而不必依赖于系统默认的java环境变量。<br>在文件中加入 <code>LANG=Zh_CN.GB18030</code>，可以设定语言环境为中文<br>修改JAVA_OPTS，可以设置JVM的启动参数</p>
+<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><ul>
+<li>jboss-eap-7.1有两种运行模式，standalone——单机模式和domain——集群模式。本文介绍了单机模式的部署。</li>
+<li>jboss启动服务器时，默认读取的配置文件是${JBOSS_HOME}/standalone/configuration/standalone.xml。也可以指定读取其他配置文件，命令是<code>./standalone.sh --server-config=standalone-custom.xml</code></li>
+<li>jboss-cli（command line interface），是jboss的命令行管理工具。执行<code>${JBOSS_HOME}/bin/jboss-cli.sh</code>即可进入。通过命令行实现部署卸载应用、配置系统设置和执行管理任务的功能。使用该工具修改系统配置时，最终也会作用到standalone.xml中。直接改xml的方式非常直观，所以更受本人青睐，本文所有配置示例均是直接修改xml。</li>
+<li>Management Console，管理控制台。是jboss提供的web管理系统，地址在<a href="http://localhost:9990/console/App.html，" target="_blank" rel="external">http://localhost:9990/console/App.html，</a> 所有的操作均可通过jboss-cli实现，本文对此不做介绍。</li>
+</ul>
+<h3 id="standalone-xml配置"><a href="#standalone-xml配置" class="headerlink" title="standalone.xml配置"></a>standalone.xml配置</h3><h4 id="地址配置"><a href="#地址配置" class="headerlink" title="地址配置"></a>地址配置</h4><p>默认的配置，服务器启动后只能通过localhost访问。通过网卡IP地址访问时，需修改配置文件。找到下面的配置片段<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;interfaces&gt;</div><div class="line">    &lt;interface name=&quot;management&quot;&gt;</div><div class="line">        &lt;inet-address value=&quot;$&#123;jboss.bind.address.management:127.0.0.1&#125;&quot;/&gt;</div><div class="line">    &lt;/interface&gt;</div><div class="line">    &lt;interface name=&quot;public&quot;&gt;</div><div class="line">        &lt;inet-address value=&quot;$&#123;jboss.bind.address:127.0.0.1&#125;&quot;/&gt;</div><div class="line">    &lt;/interface&gt;</div><div class="line">&lt;/interfaces&gt;</div></pre></td></tr></table></figure></p>
+<p>将 <strong>public</strong> 标签下的地址修改为网卡ip地址，这样就能通过IP地址访问。也可以设置为0.0.0.0，机器上所有可用的ip地址均可以访问。<br>不建议修改 <strong>management</strong> 标签下的地址，个人认为远程的管理存在一定风险，还是直接在机器上做比较好。</p>
+<h4 id="端口配置"><a href="#端口配置" class="headerlink" title="端口配置"></a>端口配置</h4><p>修改监听的端口，找到下面的配置片段：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;socket-binding-group name=&quot;standard-sockets&quot; default-interface=&quot;public&quot; port-offset=&quot;$&#123;jboss.socket.binding.port-offset:0&#125;&quot;&gt;</div><div class="line">    &lt;socket-binding name=&quot;management-http&quot; interface=&quot;management&quot; port=&quot;$&#123;jboss.management.http.port:9990&#125;&quot;/&gt;</div><div class="line">    ………… ………… …………</div><div class="line">    &lt;socket-binding name=&quot;http&quot; port=&quot;$&#123;jboss.http.port:8080&#125;&quot;/&gt;</div><div class="line">    &lt;socket-binding name=&quot;https&quot; port=&quot;$&#123;jboss.https.port:8443&#125;&quot;/&gt;</div><div class="line">    ………… ………… …………</div><div class="line">&lt;/socket-binding-group&gt;</div></pre></td></tr></table></figure></p>
+<p>根据需要修改不同协议监听的端口。管理控制台的端口默认是9990，也可以在此处修改。</p>
+<h4 id="数据源配置"><a href="#数据源配置" class="headerlink" title="数据源配置"></a>数据源配置</h4><p>数据源配置如下面的配置文件所示，标签的含义非常明晰，不再针对标签做过多解释。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">&lt;subsystem xmlns=&quot;urn:jboss:domain:datasources:5.0&quot;&gt;</div><div class="line">    &lt;datasources&gt;</div><div class="line">	    ………… ………… …………	</div><div class="line">        &lt;datasource jndi-name=&quot;java:jboss/datasources/MyDB&quot; pool-name=&quot;MyDB&quot; enabled=&quot;true&quot; use-java-context=&quot;true&quot; use-ccm=&quot;true&quot;&gt;</div><div class="line">            &lt;connection-url&gt;jdbc:jtds:sybase://10.1.21.41:11100/testDB;charset=cp936&lt;/connection-url&gt;</div><div class="line">            &lt;driver&gt;jtds124&lt;/driver&gt;</div><div class="line">            &lt;pool&gt;</div><div class="line">                &lt;min-pool-size&gt;1&lt;/min-pool-size&gt;</div><div class="line">                &lt;max-pool-size&gt;20&lt;/max-pool-size&gt;</div><div class="line">                &lt;prefill&gt;true&lt;/prefill&gt;</div><div class="line">            &lt;/pool&gt;</div><div class="line">            &lt;security&gt;</div><div class="line">                &lt;user-name&gt;user&lt;/user-name&gt;</div><div class="line">                &lt;password&gt;password&lt;/password&gt;</div><div class="line">            &lt;/security&gt;</div><div class="line">            &lt;validation&gt;</div><div class="line">                &lt;valid-connection-checker class-name=&quot;org.jboss.jca.adapters.jdbc.extensions.sybase.SybaseValidConnectionChecker&quot;/&gt;</div><div class="line">                &lt;check-valid-connection-sql&gt;SELECT 1&lt;/check-valid-connection-sql&gt;</div><div class="line">                &lt;validate-on-match&gt;true&lt;/validate-on-match&gt;</div><div class="line">                &lt;exception-sorter class-name=&quot;org.jboss.resource.adapter.jdbc.vendor.SybaseExceptionSorter&quot;/&gt;</div><div class="line">            &lt;/validation&gt;</div><div class="line">            &lt;timeout&gt;</div><div class="line">                &lt;blocking-timeout-millis&gt;30000&lt;/blocking-timeout-millis&gt;</div><div class="line">                &lt;idle-timeout-minutes&gt;1&lt;/idle-timeout-minutes&gt;</div><div class="line">            &lt;/timeout&gt;</div><div class="line">            &lt;statement&gt;</div><div class="line">                &lt;track-statements&gt;true&lt;/track-statements&gt;</div><div class="line">            &lt;/statement&gt;</div><div class="line">        &lt;/datasource&gt;</div><div class="line">        &lt;drivers&gt;</div><div class="line">			………… ………… …………		</div><div class="line">            &lt;driver name=&quot;jtds124&quot; module=&quot;net.sourceforge.jtds.jdbc.124&quot;&gt;</div><div class="line">                &lt;xa-datasource-class&gt;net.sourceforge.jtds.jdbcx.JtdsDataSource&lt;/xa-datasource-class&gt;</div><div class="line">            &lt;/driver&gt;</div><div class="line">        &lt;/drivers&gt;</div><div class="line">    &lt;/datasources&gt;</div><div class="line">&lt;/subsystem&gt;</div></pre></td></tr></table></figure></p>
+<p>配置好数据源后，需要将数据库驱动jar包放在${JBOSS_HOME}/modules下正确的位置，才能成功绑定数据源。驱动的放置目录要和driver标签中module的值保持一致，以上面的配置为例，驱动jar包的路径应该是<br><code>${JBOSS_HOME}/modules/modules/net/sourceforge/jtds/jdbc/124/main/</code><br>main不要体现在属性中，124文件夹下必须要有main文件夹，jar包在main文件夹中。<br>main文件夹下还要有module.xml，配置示例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</div><div class="line">&lt;module xmlns=&quot;urn:jboss:module:1.1&quot; name=&quot;net.sourceforge.jtds.jdbc.124&quot;&gt;</div><div class="line">    &lt;resources&gt;</div><div class="line">        &lt;resource-root path=&quot;jtds-1.2.4.jar&quot;/&gt;</div><div class="line">    &lt;/resources&gt;</div><div class="line">    &lt;dependencies&gt;</div><div class="line">        &lt;module name=&quot;javax.api&quot;/&gt;</div><div class="line">        &lt;module name=&quot;javax.transaction.api&quot;/&gt;</div><div class="line">        &lt;module name=&quot;org.jboss.as.connector&quot;/&gt;</div><div class="line">    &lt;/dependencies&gt;</div><div class="line">&lt;/module&gt;</div></pre></td></tr></table></figure></p>
+<p>module.xml中module标签的name属性要和standalone.xml中driver标签的module属性保持一致。<br>符合JDBC标准的数据源如此就配置完成。但本例中使用的是jtds，所以还要做额外的操作，否则无法正确绑定数据源。在驱动jar包的META-INF文件夹中新建 <strong>services</strong> 文件夹，然后新建名为java.sql.Driver的文件，在文件第一行写下Driver的路径。本例中，java.sql.Driver文件的内容如下：<br><code>net.sourceforge.jtds.jdbc.Driver</code><br>经过上述配置，在启动服务器时，看到输出Started Driver service with driver-name = jtds124，证明数据源配置成功。</p>
+<h4 id="Undertow容器配置"><a href="#Undertow容器配置" class="headerlink" title="Undertow容器配置"></a>Undertow容器配置</h4><p>经过下面的配置操作，修改了接收http请求的设置、容器默认的字符集，移除了jboss默认的欢迎页面，开启了http访问的日志以及输出http请求和响应的信息。<br>找到如下配置片段，默认配置为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">&lt;subsystem xmlns=&quot;urn:jboss:domain:undertow:4.0&quot;&gt;</div><div class="line">    &lt;buffer-cache name=&quot;default&quot;/&gt;</div><div class="line">    &lt;server name=&quot;default-server&quot;&gt;</div><div class="line">        &lt;http-listener name=&quot;default&quot; socket-binding=&quot;http&quot; redirect-socket=&quot;https&quot; enable-http2=&quot;true&quot;/&gt;</div><div class="line">        &lt;https-listener name=&quot;https&quot; socket-binding=&quot;https&quot; security-realm=&quot;ApplicationRealm&quot; enable-http2=&quot;true&quot;/&gt;</div><div class="line">        &lt;host name=&quot;default-host&quot; alias=&quot;localhost&quot;&gt;</div><div class="line">            &lt;location name=&quot;/&quot; handler=&quot;welcome-content&quot;/&gt;</div><div class="line">            &lt;filter-ref name=&quot;server-header&quot;/&gt;</div><div class="line">            &lt;filter-ref name=&quot;x-powered-by-header&quot;/&gt;</div><div class="line">            &lt;http-invoker security-realm=&quot;ApplicationRealm&quot;/&gt;</div><div class="line">        &lt;/host&gt;</div><div class="line">            &lt;/server&gt;</div><div class="line">    &lt;servlet-container name=&quot;default&quot;&gt;</div><div class="line">        ………… ………… …………</div><div class="line">    &lt;/servlet-container&gt;</div><div class="line">    &lt;handlers&gt;</div><div class="line">        &lt;file name=&quot;welcome-content&quot; path=&quot;$&#123;jboss.home.dir&#125;/welcome-content&quot;/&gt;</div><div class="line">    &lt;/handlers&gt;</div><div class="line">    &lt;filters&gt;</div><div class="line">        ………… ………… …………</div><div class="line">    &lt;/filters&gt;</div><div class="line">&lt;/subsystem&gt;</div></pre></td></tr></table></figure></p>
+<p>修改后的配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">&lt;subsystem xmlns=&quot;urn:jboss:domain:undertow:4.0&quot;&gt;</div><div class="line">    &lt;buffer-cache name=&quot;default&quot;/&gt;</div><div class="line">    &lt;server name=&quot;default-server&quot;&gt;</div><div class="line">        &lt;http-listener name=&quot;default&quot; socket-binding=&quot;http&quot; redirect-socket=&quot;https&quot; enable-http2=&quot;true&quot; url-charset=&quot;GBK&quot; decode-url=&quot;false&quot;/&gt;</div><div class="line">        &lt;https-listener name=&quot;https&quot; socket-binding=&quot;https&quot; security-realm=&quot;ApplicationRealm&quot; enable-http2=&quot;true&quot;/&gt;</div><div class="line">        &lt;host name=&quot;default-host&quot; alias=&quot;localhost&quot;&gt;</div><div class="line">            &lt;!-- &lt;location name=&quot;/&quot; handler=&quot;welcome-content&quot;/&gt; --&gt;</div><div class="line">            &lt;filter-ref name=&quot;server-header&quot;/&gt;</div><div class="line">            &lt;filter-ref name=&quot;x-powered-by-header&quot;/&gt;</div><div class="line">            &lt;http-invoker security-realm=&quot;ApplicationRealm&quot;/&gt;</div><div class="line">            &lt;filter-ref name=&quot;request-dumper&quot;/&gt;</div><div class="line">            &lt;access-log pattern=&quot;combined&quot; directory=&quot;$&#123;jboss.home.dir&#125;/standalone/log&quot;/&gt;</div><div class="line">        &lt;/host&gt;</div><div class="line">            &lt;/server&gt;</div><div class="line">    &lt;servlet-container name=&quot;default&quot; default-encoding=&quot;GBK&quot; use-listener-encoding=&quot;true&quot;&gt;</div><div class="line">        ………… ………… …………</div><div class="line">    &lt;/servlet-container&gt;</div><div class="line">    &lt;!-- &lt;handlers&gt;</div><div class="line">        &lt;file name=&quot;welcome-content&quot; path=&quot;$&#123;jboss.home.dir&#125;/welcome-content&quot;/&gt;</div><div class="line">    &lt;/handlers&gt; --&gt;</div><div class="line">    &lt;filters&gt;</div><div class="line">        ………… ………… …………</div><div class="line">        &lt;filter name=&quot;request-dumper&quot; class-name=&quot;io.undertow.server.handlers.RequestDumpingHandler&quot; module=&quot;io.undertow.core&quot;/&gt;</div><div class="line">    &lt;/filters&gt;</div><div class="line">&lt;/subsystem&gt;</div></pre></td></tr></table></figure></p>
+<ol>
+<li><strong>修改http请求设置：</strong>在http-listener标签中，增加了url-charset和decode-url。其中url-charset默认使用的UTF-8，可以根据需要修改。decode-url指是否使用字符集解码url和参数，默认为true。设为false则交由后续代码进行解码处理。http-listener的详细配置属性<a href="https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.1/html/configuration_guide/reference_material#http_listener_attributes" target="_blank" rel="external">点击这里</a>。</li>
+<li><strong>修改容器默认字符集：</strong>在servlet-container标签中，default-encoding设置所有应用的字符集（默认为utf-8），use-listener-encoding指是否使用listener定义的编码。servlet-container的详细配置属性<a href="https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.1/html/configuration_guide/reference_material#servlet_container_attributes" target="_blank" rel="external">点击这里</a>。</li>
+<li><strong>移除Jboss默认欢迎页面：</strong>配置文件中注释的部分，就是jboss默认欢迎页面的配置。直接注释就是将其移除，也可以将默认地址映射到某个应用上。</li>
+<li><strong>开启http访问日志：</strong>在host标签下增加access-log这一标签，即可将http请求的信息记在日志中，便于调试。directory是日志存放的目录，默认文件名为access_log.log。pattern是要日志中记录的信息，预定义了common和combined两种模式，combined的信息丰富一些。自定义的输出模式详见<a href="https://github.com/undertow-io/undertow/blob/master/core/src/main/java/io/undertow/server/handlers/accesslog/AccessLogHandler.java#L38" target="_blank" rel="external">此处</a>。</li>
+<li><strong>输出http请求和响应的信息：</strong>在filters标签下增加名为request-dumper的filter，在host标签下增加命名一致的filter-ref，就能在jboss日志中输出每一个http请求的request和response信息，便于调试。</li>
+</ol>
+<p>注：对于上面的<strong>操作1</strong>，早期版本中，在extensions和management标签之间增加下面的配置代码，可以实现同样的效果。但自从wildfly 8 之后，jboss放弃tomcat容器转而使用undertow，所以下面的配置也不再起作用了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;system-properties&gt;</div><div class="line">    &lt;property name=&quot;org.apache.catalina.connector.URI_ENCODING&quot; value=&quot;GBK&quot;/&gt;</div><div class="line">    &lt;property name=&quot;org.apache.catalina.connector.USE_BODY_ENCODING_FOR_QUERY_STRING&quot; value=&quot;true&quot;/&gt;</div><div class="line">&lt;/system-properties&gt;</div></pre></td></tr></table></figure></p>
+<h3 id="部署应用"><a href="#部署应用" class="headerlink" title="部署应用"></a>部署应用</h3><p>下面将介绍三种部署模式，但官方推荐在生产环境中，使用第三种手动模式，前两种可以应用于开发环境。<br>应用部署相关的默认配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;subsystem xmlns=&quot;urn:jboss:domain:deployment-scanner:2.0&quot;&gt;</div><div class="line">            &lt;deployment-scanner path=&quot;deployments&quot; relative-to=&quot;jboss.server.base.dir&quot; scan-interval=&quot;5000&quot; runtime-failure-causes-rollback=&quot;$&#123;jboss.deployment.scanner.rollback.on.failure:false&#125;&quot;/&gt;</div><div class="line">&lt;/subsystem&gt;</div></pre></td></tr></table></figure></p>
+<p>scan-interval是每隔多少毫秒扫描deployments文件夹下的变化。如果设定的值小于1，则只在启动时扫描。</p>
+<h4 id="全自动模式"><a href="#全自动模式" class="headerlink" title="全自动模式"></a>全自动模式</h4><p>在默认配置下，将war包上传至${JBOSS_HOME}/standalone/deployments，服务器会在启动时和每5000毫秒间隔，检查deployments下的文件变化，部署应用。</p>
+<h4 id="半自动模式"><a href="#半自动模式" class="headerlink" title="半自动模式"></a>半自动模式</h4><p>增加属性 <code>auto-deploy-zipped=&quot;false&quot;</code><br>上传应用myApp.war至deployments文件夹后，在deployments文件夹下新建一个文件，命名为myApp.war.dodeploy，服务器检测到这个文件后，则会开始执行部署。更多配置详情<a href="https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.1/html/configuration_guide/deploying_applications#configure_deploy_scanner" target="_blank" rel="external">点击这里</a>。</p>
+<h4 id="手动模式"><a href="#手动模式" class="headerlink" title="手动模式"></a>手动模式</h4><p>增加属性<code>scan-enabled=&quot;false&quot;</code><br>此模式是官方推荐的生产环境部署应用方式，无需将应用上传至deployments文件夹下。首先保证myApp.war在服务器上，假设其路径为<strong>/usr/me/myApp.war</strong>。<br>启动服务器，并使用<code>./jboss-cli.sh --connect</code>命令进入命令行管理界面。执行命令<code>deploy /usr/me/myApp.war</code>部署应用。取消部署时，在命令行管理界面执行 <code>undeploy myApp.war</code>。<br>应用的数据会在${JBOSS_HOME}/standalone/data/content下，并且standalone.xml最下方会出现deployments标签，显示已经部署的应用。</p>
+<h3 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h3><p>既然是一个入门级的教程，就介绍下jboss一系列的产品。因为改名，导致jboss系列越来越乱，下面做一个简单梳理。<br>Jboss WS（Web Server）：Jboss基于Tomcat研发的Servlet容器。<br>Undertow： Jboss自主研发的Servlet容器。<br>Jboss AS（Application Server）： Jboss免费版的<strong>早期</strong>版本，由于和Jboss eap名称相近，在Jboss AS7之后就改名为Wildfly。内部使用的容器是Jboss WS。<br>WildFly： 版本号从WildFly 8.0开始，由Jboss AS改名而来。内部使用的容器是Undertow。<br>Jboss EAP（Enterprise Application Platform）：Jboss的企业版。会将免费版中验证过的，成熟的技术引入该版本，支持周期长。6的版本以Jboss AS7为基础；7的版本以Wildfly为基础。</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ol>
+<li><a href="https://developer.jboss.org/thread/249928" target="_blank" rel="external">非jdbc驱动配置services</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/title- react-navigation自定义StackNavigator页面跳转动画/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1159,7 +1321,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1203,7 +1365,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
