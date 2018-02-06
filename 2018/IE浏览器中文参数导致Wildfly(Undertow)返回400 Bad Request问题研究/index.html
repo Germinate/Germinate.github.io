@@ -94,7 +94,7 @@
 问题探究经过实验，发现IE浏览器6, 8, 11版本均存在该问题，但chrome浏览器正常，微软的Edge浏览器也是正常的。除了中文，如果参数含有‘&amp;lt;’, ‘{‘等特殊字符时，">
 <meta property="og:image" content="http://ol5mzi4z4.bkt.clouddn.com/chrome_request_package.png">
 <meta property="og:image" content="http://ol5mzi4z4.bkt.clouddn.com/IE_request_package.png">
-<meta property="og:updated_time" content="2018-02-06T01:15:37.366Z">
+<meta property="og:updated_time" content="2018-02-06T01:19:18.893Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="IE浏览器中文参数导致Wildfly(Undertow)返回400 Bad Request问题研究">
 <meta name="twitter:description" content="问题描述在使用Jboss-eap-7.1（内核是Wildfly）时，向服务器发送带中文url参数的Get请求时，服务器会返回400错误。而且应用根本接收不到该请求的信息，在连接层面就被拦截了，没有将请求转给应用处理。
@@ -327,7 +327,7 @@
 
       
         <h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>在使用Jboss-eap-7.1（内核是Wildfly）时，向服务器发送带中文url参数的Get请求时，服务器会返回400错误。而且应用根本接收不到该请求的信息，在连接层面就被拦截了，没有将请求转给应用处理。</p>
-<h3 id="问题探究"><a href="#问题探究" class="headerlink" title="问题探究"></a>问题探究</h3><p>经过实验，发现IE浏览器6, 8, 11版本均存在该问题，但chrome浏览器正常，微软的Edge浏览器也是正常的。除了中文，如果参数含有<strong>‘&lt;’</strong>, <strong>‘{‘</strong>等特殊字符时，IE浏览器也会报400错误。经过查找资料和抓包分析，发现是编码问题导致了两个浏览器的结果不同，但不是大家一般认为的字符集的原因。下面是不同浏览器针对GET请求URL编码情况的分析。对于GET URL <code>http://example.com?lover=樊</code></p>
+<h3 id="问题探究"><a href="#问题探究" class="headerlink" title="问题探究"></a>问题探究</h3><p>经过实验，发现IE浏览器6, 8, 11版本均存在该问题，但chrome浏览器正常，微软的Edge浏览器也是正常的。除了中文，如果参数含有<strong>‘&lt;’</strong>, <strong>‘{‘</strong>等特殊字符时，IE浏览器也会报400错误。经过查找资料和抓包分析，发现是编码问题导致了两个浏览器的结果不同，但不是大家一般认为的字符集的原因。下面是不同浏览器针对GET请求URL编码情况的分析。对于GET URL <code>http://example.com/test?lover=樊</code></p>
 <ul>
 <li>chrome浏览器先使用UTF-8字符集编码URL中的所有字符，再使用 <strong><a href="https://tools.ietf.org/html/rfc3986#page-12" target="_blank" rel="external">%编码（Percent-Encoding）</a></strong>将字节转换为%HH（%+两个十六进制数字）的形式，这样可以保证URL中全部是标准ASCII字符。樊的UTF-8编码为{E6, A8, 8A}，实际发送的请求是 <a href="http://example.com/test?lover=%E6%A8%8A" target="_blank" rel="external">http://example.com/test?lover=%E6%A8%8A</a></li>
 <li>IE浏览器会使用GBK字符集编码URL中的参数，但不会转换为%编码。樊的GBK编码为{B7, AE} 。实际发送的请求时，直接将樊字对应的GBK字节作为请求的内容。</li>
